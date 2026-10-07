@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Поиск фотографий</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+        }
+
+        header {
+            background: #222;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+        }
+
+        .search {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        input {
+            width: 400px;
+            padding: 14px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 14px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background: #1877f2;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0d65d9;
+        }
+
+        #results {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .photo {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .photo img {
+            max-width: 100%;
+            width: 600px;
+            border-radius: 10px;
+        }
+
+        .message {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>Поиск фотографий</h1>
+
+    <div class="search">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Введите название фотографии"
+        >
+
+        <button onclick="searchPhotos()">
+            Поиск
+        </button>
+
+    </div>
+
+</header>
+
+<div id="results"></div>
+
+<script>
+
+    const photos = [
+        {
+            title: "Фото",
+            file: "123321.jpg",
+            keywords: "фото фотография"
+        }
+    ];
+
+
+    function searchPhotos() {
+
+        const query = document
+            .getElementById("searchInput")
+            .value
+            .toLowerCase()
+            .trim();
+
+        const results = document.getElementById("results");
+
+
+        if (query === "") {
+
+            results.innerHTML = `
+                <div class="message">
+                    <h2>Введите название фотографии</h2>
+                </div>
+            `;
+
+            return;
+        }
+
+
+        const found = photos.filter(photo =>
+            photo.title.toLowerCase().includes(query) ||
+            photo.file.toLowerCase().includes(query) ||
+            photo.keywords.toLowerCase().includes(query)
+        );
+
+
+        if (found.length === 0) {
+
+            results.innerHTML = `
+                <div class="message">
+                    <h2>Фотография не найдена</h2>
+                    <p>Попробуйте другое название.</p>
+                </div>
+            `;
+
+            return;
+        }
+
+
+        results.innerHTML = "";
+
+
+        found.forEach(photo => {
+
+            results.innerHTML += `
+                <div class="photo">
+
+                    <h2>${photo.title}</h2>
+
+                    <img
+                        src="${photo.file}"
+                        alt="${photo.title}"
+                    >
+
+                </div>
+            `;
+
+        });
+
+    }
+
+
+    document
+        .getElementById("searchInput")
+        .addEventListener("keydown", function(event) {
+
+            if (event.key === "Enter") {
+                searchPhotos();
+            }
+
+        });
+
+</script>
+
+</body>
+</html>
